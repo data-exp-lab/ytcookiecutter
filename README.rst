@@ -1,7 +1,12 @@
-testing out a dxl/yt cookie cutter template
+testing out a dxl/yt cookiecutter template
 
-includes github actions, auto-generation of requirements.txt with yt-related dependencies. To use:
+in addition to the standard cookiecutter template includes github actions, auto-generation of requirements.txt with yt-related dependencies. To use, first install cookiecutter.
 
+    pip install cookiecutter
+    
+and then to use this template:
+
+    cookiecutter https://github.com/chrishavlin/dxlcookiecuttertest/cookiecutter-pypackage.git
 
 
 ======================
