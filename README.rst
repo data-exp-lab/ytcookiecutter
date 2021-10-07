@@ -6,7 +6,7 @@ in addition to the standard cookiecutter template features, this one includes gi
     
 and then to use this template:
 
-    cookiecutter https://github.com/chrishavlin/dxlcookiecuttertest/cookiecutter-pypackage.git
+    cookiecutter https://github.com/chrishavlin/dxlcookiecuttertest.git
 
 
 ======================
