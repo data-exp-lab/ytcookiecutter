@@ -2,6 +2,7 @@
 import os
 import yaml
 from collections import defaultdict
+from github import Github
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
 
@@ -80,7 +81,6 @@ def _generate_requirements():
 
 
 def _add_skeleton():
-    from github import Github
     g = Github()
     ytrepo = g.get_repo("yt-project/yt")
     subdir = "yt/frontends/_skeleton/"
