@@ -1,3 +1,9 @@
+testing out a dxl/yt cookie cutter template
+
+includes github actions, auto-generation of requirements.txt with yt-related dependencies. To use:
+
+
+
 ======================
 Cookiecutter PyPackage
 ======================
