@@ -18,10 +18,10 @@ for req, install_name in template_reqs.items():
     try:
         _ = __import__(req)
     except ImportError:
-        missing_reqs.append(req)
+        missing_reqs.append(install_name)
 
 if missing_reqs:
-    print("\nThis template requires some extra modules that are not installed:")
+    print("\nThis template requires some packages that are not installed:")
     print( ", ".join(missing_reqs))
     print("Install with:")
     extra_reqs = " ".join(missing_reqs)
