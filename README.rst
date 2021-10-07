@@ -1,6 +1,6 @@
 testing out a dxl/yt cookiecutter template
 
-in addition to the standard cookiecutter template includes github actions, auto-generation of requirements.txt with yt-related dependencies. To use, first install cookiecutter.
+in addition to the standard cookiecutter template features, this one includes github actions, pre-commit configuration, and auto-generation of requirements files with yt-related dependencies. To use, first install cookiecutter.
 
     pip install cookiecutter
     
