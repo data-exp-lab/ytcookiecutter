@@ -98,9 +98,10 @@ def _add_skeleton():
         repo_file = ytrepo.get_contents(subdir + fi)
         fi_contents = repo_file.decoded_content.decode('ascii')
 
-        fe_name = '{{ cookiecutter.project_slug}}'
+        fe_name = '{{ cookiecutter.frontend_name}}'
         if fe_name != "Skeleton":
             fi_contents = fi_contents.replace("Skeleton", fe_name)
+            fi_contents = fi_contents.replace("skeleton", fe_name.lower())
 
         package_file = get_project_filepath(os.path.join(project_dir, fi))
         with open(package_file, "w") as newfi:
