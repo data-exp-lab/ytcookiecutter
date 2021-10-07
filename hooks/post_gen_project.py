@@ -6,7 +6,11 @@ PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
 
 def remove_file(filepath):
-    os.remove(os.path.join(PROJECT_DIRECTORY, filepath))
+    os.remove(get_project_filepath(filepath))
+
+
+def get_project_filepath(filepath):
+    return os.path.join(PROJECT_DIRECTORY, filepath)
 
 
 def _parse_package(version_string):
@@ -75,6 +79,36 @@ def _generate_requirements():
     remove_file(reqfi)
 
 
+def _add_skeleton():
+    from github import Github
+    g = Github()
+    ytrepo = g.get_repo("yt-project/yt")
+    subdir = "yt/frontends/_skeleton/"
+
+    # files to copy
+    files = ["api.py",
+             "data_structures.py",
+             "definitions.py",
+             "fields.py",
+             "io.py",
+             "misc.py",
+             ]
+    project_dir = '{{ cookiecutter.project_slug }}'
+    for fi in files:
+        repo_file = ytrepo.get_contents(subdir + fi)
+        fi_contents = repo_file.decoded_content.decode('ascii')
+
+        fe_name = '{{ cookiecutter.project_slug}}'
+        if fe_name != "Skeleton":
+            fi_contents = fi_contents.replace("Skeleton", fe_name)
+
+        package_file = get_project_filepath(os.path.join(project_dir, fi))
+        with open(package_file, "w") as newfi:
+            newfi.write(fi_contents)
+
+
+
+
 if __name__ == '__main__':
 
     project_dir = '{{ cookiecutter.project_slug }}'
@@ -91,3 +125,6 @@ if __name__ == '__main__':
         remove_file('LICENSE')
 
     _generate_requirements()
+
+    if "{{ cookiecutter.generate_yt_skeleton_frontend|lower }}" == "y":
+        _add_skeleton()
