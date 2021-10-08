@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
 import yaml
+from shutil import copyfile, rmtree
 from collections import defaultdict
-from github import Github
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
 
@@ -80,43 +80,36 @@ def _generate_requirements():
     remove_file(reqfi)
 
 
-def _add_skeleton():
-    g = Github()
-    ytrepo = g.get_repo("yt-project/yt")
-    subdir = "yt/frontends/_skeleton/"
+def copy_frontend_template(dest_dir, template_dir, fe_type):
 
-    # files to copy
-    files = ["api.py",
-             "data_structures.py",
-             "definitions.py",
-             "fields.py",
-             "io.py",
-             "misc.py",
-             ]
+    source_dir = os.path.join(template_dir, fe_type)
+    init_contents = None
+    for fi in os.listdir(source_dir):
+        if fi == "__init__.py":
+            with open(os.path.join(source_dir, fi), "r") as fhandle:
+                init_contents = "\n" + fhandle.read() + "\n"
+        else:
+            copyfile(os.path.join(source_dir, fi),
+                     os.path.join(dest_dir, fi))
+    return init_contents
 
-    # fetch the files, write most of them
-    file_contents = {}
-    p_dir = '{{ cookiecutter.project_slug }}'
-    for fi in files:
-        repo_file = ytrepo.get_contents(subdir + fi)
-        fi_contents = repo_file.decoded_content.decode('ascii')
 
-        fe_name = '{{ cookiecutter.frontend_name}}'
-        if fe_name != "Skeleton":
-            fi_contents = fi_contents.replace("Skeleton", fe_name)
-            fi_contents = fi_contents.replace("skeleton", fe_name.lower())
+def _select_frontend(project_dir):
+    # frontend selection: copies over files from frontend_templates, merges
+    # the __init__.py file and deletes the frontend_templates directory
 
-        file_contents[fi] = fi_contents
-        p_file = get_project_filepath(os.path.join(p_dir, fi))
-        with open(p_file, "w") as newfi:
-            newfi.write(fi_contents)
+    fe_type = '{{ cookiecutter.frontend_type }}'.lower()
+    template_dir = os.path.join(project_dir, "frontend_templates")
+    if fe_type == "amr skeleton":
+        init_contents = copy_frontend_template(project_dir, template_dir, "skeleton")
+    elif "stream" in fe_type:
+        init_contents = copy_frontend_template(project_dir, template_dir, "stream")
 
-    # copy the api.py contents into existing init as well. is the api.py file
-    # necessary at all?
-    p_file = get_project_filepath(os.path.join(p_dir, "__init__.py"))
-    with open(p_file, "a") as initfi:
-        initfi.write("\n" + file_contents["api.py"] + "\n")
+    if init_contents is not None:
+        with open(os.path.join(project_dir, "__init__.py"), "a") as fhandle:
+            fhandle.write(init_contents)
 
+    rmtree(template_dir)
 
 
 if __name__ == '__main__':
@@ -135,9 +128,5 @@ if __name__ == '__main__':
         remove_file('LICENSE')
 
     _generate_requirements()
+    _select_frontend(project_dir)
 
-    fe_type = '{{ cookiecutter.frontend_type }}'.lower()
-    if fe_type == "amr skeleton":
-        _add_skeleton()
-
-    # stream frontends are taken care of in the project_slug template

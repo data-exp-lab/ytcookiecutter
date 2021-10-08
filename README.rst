@@ -28,7 +28,7 @@ Quickstart
 
 To use, first install cookiecutter and some extra dependencies needed for template generation:
 
-    pip install cookiecutter pyyaml PyGithub
+    pip install cookiecutter pyyaml
 
 and then to use this template:
 

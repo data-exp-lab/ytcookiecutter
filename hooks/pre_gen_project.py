@@ -12,7 +12,7 @@ if not re.match(MODULE_REGEX, module_name):
 
 # check that the extra packages required for using this template are installed.
 # would be nice if this could happen before the template was generated...
-template_reqs = {"yaml": "pyyaml", "github": "PyGithub"}
+template_reqs = {"yaml": "pyyaml"}
 missing_reqs = []
 for req, install_name in template_reqs.items():
     try:

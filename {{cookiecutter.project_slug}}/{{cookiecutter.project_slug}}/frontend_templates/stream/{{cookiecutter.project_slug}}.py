@@ -43,8 +43,6 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_uniform_grid for convenience:
 {%- endif %}
 
 {%- if cookiecutter.frontend_type|lower == "stream: amr grids" %}
@@ -92,8 +90,6 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_amr_grids for convenience:
 {%- endif %}
 
 {%- if cookiecutter.frontend_type|lower == "stream: particles" %}
@@ -139,8 +135,6 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_particles for convenience:
 {%- endif %}
 
 {%- if cookiecutter.frontend_type|lower == "stream: octree" %}
@@ -188,8 +182,6 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_octree for convenience:
 {%- endif %}
 
 {%- if cookiecutter.frontend_type|lower == "stream: hexahedral mesh" %}
@@ -235,8 +227,6 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_hexahedral_mesh for convenience:
 {%- endif %}
 
 {%- if cookiecutter.frontend_type|lower == "stream: unstructured mesh" %}
@@ -284,7 +274,5 @@ def load(filename: str):
 
     # return the in-memory ds
     return ds
-
-# description of load_unstructured_mesh for convenience:
 {%- endif %}
 

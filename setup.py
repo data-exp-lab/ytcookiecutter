@@ -12,7 +12,7 @@ setup(
     url='https://github.com/chrishavlin/dxlcookiecutter',
     keywords=['cookiecutter', 'template', 'package', ],
     python_requires='>=3.6',
-    install_requires=["yt", "Click>=7.0"],
+    install_requires=["yt", "Click>=7.0", "PyGithub"],
     entry_points={
         'console_scripts': [
             'dxlcookiecutter=dxlcookiecutter.cli:main',

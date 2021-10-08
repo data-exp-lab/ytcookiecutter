@@ -89,12 +89,20 @@ def concat_stream_types(stream_types: list) -> list:
     return stream_code
 
 
-def write_template(stream_types: list, filename: str = "stream_template.py"):
+def write_template(stream_types: list,
+                   filename: str = "stream_template.py",
+                   subdir: str = "./"):
 
     stream_code = concat_stream_types(stream_types)
-    with open(filename, "w") as fi:
+
+    fullfi = os.path.join(subdir, filename)
+    with open(fullfi, "w") as fi:
         for line in stream_code:
             fi.write(line)
+
+    initfi = os.path.join(subdir, "__init__.py")
+    with open(initfi, "w") as fi:
+        fi.write("from .{{ cookiecutter.project_slug}} import load")
 
 
 if __name__ == "__main__":
