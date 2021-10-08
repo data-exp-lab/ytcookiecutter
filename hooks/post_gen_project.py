@@ -93,7 +93,10 @@ def _add_skeleton():
              "io.py",
              "misc.py",
              ]
-    project_dir = '{{ cookiecutter.project_slug }}'
+
+    # fetch the files, write most of them
+    file_contents = {}
+    p_dir = '{{ cookiecutter.project_slug }}'
     for fi in files:
         repo_file = ytrepo.get_contents(subdir + fi)
         fi_contents = repo_file.decoded_content.decode('ascii')
@@ -103,10 +106,16 @@ def _add_skeleton():
             fi_contents = fi_contents.replace("Skeleton", fe_name)
             fi_contents = fi_contents.replace("skeleton", fe_name.lower())
 
-        package_file = get_project_filepath(os.path.join(project_dir, fi))
-        with open(package_file, "w") as newfi:
+        file_contents[fi] = fi_contents
+        p_file = get_project_filepath(os.path.join(p_dir, fi))
+        with open(p_file, "w") as newfi:
             newfi.write(fi_contents)
 
+    # copy the api.py contents into existing init as well. is the api.py file
+    # necessary at all?
+    p_file = get_project_filepath(os.path.join(p_dir, "__init__.py"))
+    with open(p_file, "a") as initfi:
+        initfi.write("\n" + file_contents["api.py"] + "\n")
 
 
 
@@ -127,5 +136,8 @@ if __name__ == '__main__':
 
     _generate_requirements()
 
-    if "{{ cookiecutter.generate_yt_skeleton_frontend|lower }}" == "y":
+    fe_type = '{{ cookiecutter.frontend_type }}'.lower()
+    if fe_type == "amr skeleton":
         _add_skeleton()
+
+    # stream frontends are taken care of in the project_slug template
