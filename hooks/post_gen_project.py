@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import os
-import yaml
 from shutil import copyfile, rmtree
-from collections import defaultdict
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
 
@@ -23,61 +21,54 @@ def _parse_package(version_string):
     return version_string
 
 
-def _check_reqs_for_duplicates(all_reqs):
-    packages = []
-    duplicates = []
+def _check_reqs_for_duplicates():
+
+    reqfile = os.path.join(PROJECT_DIRECTORY, "requirements.txt")
+    with open(reqfile, "r") as fi:
+        all_reqs = [pack for pack in fi.read().split("\n") if pack != '']
+
+    packages = []  # list of package names, no versions
+    duplicates = []  # list of duplicated package names, no versions
+    fullpackages = []  # just a copy of all_reqs if there are no duplicates
 
     # first get the list of duplicated packages
+    warn_dupes = False
+    rewrite_reqs = False
     for req in all_reqs:
-        package = _parse_package(req)
-        if package in packages:
-            duplicates.append(package)
-            print("Warning: duplicate requirement found, check requirements.txt "
-                  "in your new package directory")
-        packages.append(package)
+        package_name = _parse_package(req)
+        if req in fullpackages:
+            # this is an EXACT duplicate, just leave it off
+            rewrite_reqs = True
+            continue
+        else:
+            # not an exact duplicate
+            fullpackages.append(req)
 
-    # if there are duplicates, copy over reqs but flag the duplicates
+        # the package name may still be a duplicate
+        if package_name in packages:
+            duplicates.append(package_name)
+            warn_dupes = True
+            rewrite_reqs = True
+        packages.append(package_name)
+
+    if warn_dupes:
+        print("Warning: duplicate requirement found, check requirements.txt "
+                      "in your new package directory")
+
+    # if there are duplicates, copy over reqs but flag the duplicates and
+    # write back out to the requirements file.
     if duplicates:
         reqs = []
-        for req in all_reqs:
+        for req in fullpackages:
             if _parse_package(req) in duplicates:
                 reqs.append(req + " <<< duplicate")
             else:
                 reqs.append(req)
-        return reqs
-    return all_reqs
-
-
-def _generate_requirements():
-
-    # generates the requirements.txt file.
-
-    # the following dict defines the string to check against the cookiecutter
-    # value
-    req_set_truth = defaultdict(lambda: "y")
-    req_set_truth['click'] = 'click'
-
-    # the read in the yaml containing the requirement sets
-    reqfi = "requirement_sets.yml"
-    with open(reqfi) as f:
-        req_yaml = yaml.load(f.read(), Loader=yaml.FullLoader)
-    req_filename = "requirements.txt"  # the final requirements file
-
-    # generate the list of requirements
-    all_reqs = []
-    if '{{ cookiecutter.command_line_interface|lower }}' == req_set_truth["click"]:
-        all_reqs += req_yaml["click"]
-    if '{{ cookiecutter.include_yt_requirements|lower }}' == req_set_truth["yt"][0]:
-        all_reqs += req_yaml["yt"]
-
-    all_reqs = _check_reqs_for_duplicates(all_reqs)
-
-    # write out the requirements
-    with open(req_filename, "w") as reqs:
-        reqs.write("\n".join(all_reqs))
-
-    # delete the yaml file from the new package files
-    remove_file(reqfi)
+        with open(reqfile, "w") as fi:
+            fi.write("\n".join(reqs))
+    elif rewrite_reqs:
+        with open(reqfile, "w") as fi:
+            fi.write("\n".join(fullpackages))
 
 
 def copy_frontend_template(dest_dir, template_dir, fe_type):
@@ -100,6 +91,7 @@ def _select_frontend(project_dir):
 
     fe_type = '{{ cookiecutter.frontend_type }}'.lower()
     template_dir = os.path.join(project_dir, "frontend_templates")
+    init_contents = None
     if fe_type == "amr skeleton":
         init_contents = copy_frontend_template(project_dir, template_dir, "skeleton")
     elif "stream" in fe_type:
@@ -127,6 +119,6 @@ if __name__ == '__main__':
     if 'Not open source' == '{{ cookiecutter.open_source_license }}':
         remove_file('LICENSE')
 
-    _generate_requirements()
+    _check_reqs_for_duplicates()
     _select_frontend(project_dir)
 

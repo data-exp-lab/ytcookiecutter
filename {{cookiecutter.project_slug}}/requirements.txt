@@ -1,0 +1,10 @@
+{%- if cookiecutter.include_yt_requirements|lower == 'y' %}
+yt>=4.0.1
+h5py>=3.4.0
+pooch>=1.5.1
+pandas>=1.3.3
+{%- endif %}
+{%- if cookiecutter.command_line_interface|lower == 'click' %}
+Click>=7.0
+yt>=4.0.1
+{%- endif %}
