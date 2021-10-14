@@ -1,4 +1,4 @@
-{% if cookiecutter.frontend_type|lower == "stream: uniform grid" %}
+{%- if cookiecutter.frontend_type|lower == "stream: uniform grid" -%}
 from yt.loaders import load_uniform_grid
 
 def load(filename: str):
@@ -43,8 +43,8 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
-{% if cookiecutter.frontend_type|lower == "stream: amr grids" %}
+{%- endif -%}
+{%- if cookiecutter.frontend_type|lower == "stream: amr grids" -%}
 from yt.loaders import load_amr_grids
 
 def load(filename: str):
@@ -89,8 +89,8 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
-{% if cookiecutter.frontend_type|lower == "stream: particles" %}
+{%- endif -%}
+{%- if cookiecutter.frontend_type|lower == "stream: particles" -%}
 from yt.loaders import load_particles
 
 def load(filename: str):
@@ -133,8 +133,8 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
-{% if cookiecutter.frontend_type|lower == "stream: octree" %}
+{%- endif -%}
+{%- if cookiecutter.frontend_type|lower == "stream: octree" -%}
 from yt.loaders import load_octree
 
 def load(filename: str):
@@ -179,8 +179,8 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
-{% if cookiecutter.frontend_type|lower == "stream: hexahedral mesh" %}
+{%- endif -%}
+{%- if cookiecutter.frontend_type|lower == "stream: hexahedral mesh" -%}
 from yt.loaders import load_hexahedral_mesh
 
 def load(filename: str):
@@ -223,8 +223,8 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
-{% if cookiecutter.frontend_type|lower == "stream: unstructured mesh" %}
+{%- endif -%}
+{%- if cookiecutter.frontend_type|lower == "stream: unstructured mesh" -%}
 from yt.loaders import load_unstructured_mesh
 
 def load(filename: str):
@@ -269,4 +269,4 @@ def load(filename: str):
     # return the in-memory ds
     return ds
 
-{% endif %}
+{%- endif -%}
