@@ -1,11 +1,12 @@
 import yt
 from inspect import getfullargspec, getdoc
 import os
-
+from . import metatemplater
 
 class StreamTemplate:
 
     def __init__(self, stream_type: str, include_docstring: bool=False):
+        self.template_name = "stream.py"
         self.stream_type = stream_type
         self.stream_type_ = stream_type.replace(" ", "_")
         self.frontend_type_str = "stream: " + stream_type
@@ -22,59 +23,41 @@ class StreamTemplate:
         self.default_types = [type(fd) for fd in self.funcargs.defaults]
 
         # generate the code for this load function
-        self.code = self._gen_code()
+        self.template = metatemplater.get_template(self.template_name)
+        self.filled_template = self._fill_template()
 
-    def _gen_code(self) -> list:
-        code = []
-        code.append('{%- if cookiecutter.frontend_type|lower == "' + self.frontend_type_str + '" %}' + "\n")
-        code.append(f"from yt.loaders import {self.load_func_str}\n\n")
-        code.append("def load(filename: str):\n\n")
-        code.append(indent_str("# write code to load data from filename into memory!\n\n"))
+    def _fill_template(self):
 
+        func_args = []
+        kwarg_dict = {}
         for iarg, argname in enumerate(self.funcargs.args):
-
             if iarg > self.n_args - 1:
                 # its a keyword argument
                 nkw = iarg - self.n_args
 
-                if nkw == 0:
-                    code.append("\n"+indent_str("# set or delete optional kwargs\n"))
                 def_val = self.funcargs.defaults[nkw]
                 if self.default_types[nkw] == str:
                     def_val = f"'{def_val}'"
-                argstr = f"{argname} = {def_val}\n"
-            else:
-                argstr = f"{argname} = ????????\n"
-            code.append(indent_str(argstr))
 
-        code.append("\n"+indent_str("# call the stream data loader.\n"))
-        code.append(indent_str(f"ds = {self.load_func_str}(\n"))
-        for iarg, argname in enumerate(self.funcargs.args):
-
-            if iarg > self.n_args - 1:
                 # its a keyword argument
-                code.append(indent_str(f"{argname}={argname},\n", n=2))
+                kwarg_dict[argname] = def_val
             else:
-                code.append(indent_str(f"{argname},\n", n=2))
-        code.append(indent_str(")\n\n", n=2))
-        code.append("\n" + indent_str("# return the in-memory ds\n"))
-        code.append(indent_str("return ds\n"))
-        if self.include_docstring:
-            code.append(f"\n# description of {self.load_func_str} for convenience:\n")
-            code.append('"""\n')
-            code.append(self.docstr)
-            code.append('\n"""\n')
-        code.append('{%- endif %}' + "\n\n")
+                func_args.append(argname)
 
-        return code
+        rs = self.template.render(load_func=self.load_func_str,
+                                  frontend_type_str=self.frontend_type_str,
+                                  argnames=func_args,
+                                  kwarg_dict=kwarg_dict,
+                                  include_docstring=self.include_docstring,
+                                  docstring=self.docstr)
+        return rs
 
     def write(self, filename: str, mode="w"):
         with open(filename, mode) as fi:
             self.write_to_handle(fi)
 
     def write_to_handle(self, fhandle):
-        for c in self.code:
-            fhandle.write(c)
+        fhandle.write(self.filled_template)
 
 
 def indent_str(in_str: str, n: int = 1):
