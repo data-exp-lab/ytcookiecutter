@@ -65,10 +65,10 @@ def indent_str(in_str: str, n: int = 1):
 
 
 def concat_stream_types(stream_types: list) -> list:
-    stream_code = []
+    stream_code = ''
     for s in stream_types:
         stemp = StreamTemplate(s)
-        stream_code += stemp.code
+        stream_code += stemp.filled_template +"\n"
     return stream_code
 
 
@@ -80,8 +80,7 @@ def write_template(stream_types: list,
 
     fullfi = os.path.join(subdir, filename)
     with open(fullfi, "w") as fi:
-        for line in stream_code:
-            fi.write(line)
+        fi.write(stream_code)
 
     initfi = os.path.join(subdir, "__init__.py")
     with open(initfi, "w") as fi:

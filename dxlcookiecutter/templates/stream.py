@@ -1,4 +1,4 @@
-{%- if cookiecutter.frontend_type|lower == !{frontend_type_str}! %}
+{% if cookiecutter.frontend_type|lower == "!{frontend_type_str}!" %}
 from yt.loaders import !{load_func}!
 
 def load(filename: str):
@@ -29,5 +29,5 @@ def load(filename: str):
 """
 !{docstring}!
 """
-<%- endif %>
+<% endif %>
 {% endif %}
