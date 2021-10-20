@@ -1,13 +1,17 @@
 from github import Github
 from abc import ABC, abstractmethod
 import os
+from typing import Union
+from pathlib import Path, PosixPath
+from .custom_types import filelike
+from .utilities import _sanitize_path
 
 
 class GithubSkeleton(ABC):
 
-    def __init__(self, subdir: str, files_to_copy: list, dest_dir: str, ):
-        self.subdir = subdir
-        self.dest_dir = dest_dir
+    def __init__(self, subdir: filelike, files_to_copy: list, dest_dir: filelike):
+        self.subdir = _sanitize_path(subdir)
+        self.dest_dir = _sanitize_path(dest_dir)
         self.files_to_copy = files_to_copy
         self.file_content = self._fetch()
 
@@ -17,7 +21,8 @@ class GithubSkeleton(ABC):
 
         file_content = {}
         for fi in self.files_to_copy:
-            repo_file = ytrepo.get_contents(self.subdir + fi)
+            file_path = str(self.subdir.joinpath(fi))
+            repo_file = ytrepo.get_contents(file_path)
             fi_contents = repo_file.decoded_content.decode('ascii')
             file_content[fi] = self._sanitize_file_contents(fi_contents)
 
@@ -29,14 +34,14 @@ class GithubSkeleton(ABC):
 
     def write(self):
         for fi, fi_contents in self.file_content.items():
-            fullfi = os.path.join(self.dest_dir, fi)
+            fullfi = self.dest_dir.joinpath(fi)
             with open(fullfi, "w") as fhandle:
                 fhandle.write(fi_contents)
 
 
 class AMRSkeleton(GithubSkeleton):
 
-    def __init__(self, dest_dir: str = None):
+    def __init__(self, dest_dir: filelike = None):
         subdir = "yt/frontends/_skeleton/"
         files = ["api.py",
                  "data_structures.py",
@@ -64,11 +69,11 @@ class AMRSkeleton(GithubSkeleton):
         super().write()
 
         # copy over the api file into an init file
-        init_fi = os.path.join(self.dest_dir, "__init__.py")
+        init_fi = self.dest_dir.joinpath("__init__.py")
         with open(init_fi, "w") as fhandle:
             fhandle.write(self.file_content["api.py"])
 
 
-def write_template(subdir: str = "./"):
+def write_template(subdir: filelike = "./"):
     skele = AMRSkeleton(dest_dir=subdir)
     skele.write()

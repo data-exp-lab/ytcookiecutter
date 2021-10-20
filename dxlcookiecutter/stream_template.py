@@ -2,6 +2,8 @@ import yt
 from inspect import getfullargspec, getdoc
 import os
 from . import metatemplater
+from .custom_types import filelike
+from .utilities import _sanitize_path
 
 class StreamTemplate:
 
@@ -52,7 +54,7 @@ class StreamTemplate:
                                   docstring=self.docstr)
         return rs
 
-    def write(self, filename: str, mode="w"):
+    def write(self, filename: filelike, mode="w"):
         with open(filename, mode) as fi:
             self.write_to_handle(fi)
 
@@ -72,17 +74,18 @@ def concat_stream_types(stream_types: list) -> list:
     return stream_code
 
 
-def write_template(stream_types: list,
-                   filename: str = "stream_template.py",
-                   subdir: str = "./"):
+def write_template(stream_types: list[str],
+                   filename: filelike = "stream_template.py",
+                   subdir: filelike = "./"):
 
     stream_code = concat_stream_types(stream_types)
 
-    fullfi = os.path.join(subdir, filename)
+    subdir = _sanitize_path(subdir)
+    fullfi = subdir.joinpath(filename)
     with open(fullfi, "w") as fi:
         fi.write(stream_code)
 
-    initfi = os.path.join(subdir, "__init__.py")
+    initfi = subdir.joinpath("__init__.py")
     with open(initfi, "w") as fi:
         fi.write("from .{{ cookiecutter.project_slug}} import load")
 
