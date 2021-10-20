@@ -4,7 +4,7 @@ ytcookiecutter
 
 This is an experimental Cookiecutter_ template for yt-related development, including rapid prototyping of new frontends.
 
-* GitHub repo: https://github.com/chrishavlin/ytcookiecutter/
+* GitHub repo: https://github.com/data-exp-lab/ytcookiecutter/
 * Documentation: https://ytcookiecutter.readthedocs.io/
 * Free software: BSD license
 
@@ -26,13 +26,13 @@ Build Status
 Quickstart
 ----------
 
-To use, first install cookiecutter and some extra dependencies needed for template generation:
+To use, first install cookiecutter:
 
-    pip install cookiecutter pyyaml
+    pip install cookiecutter
 
 and then to use this template:
 
-    cookiecutter https://github.com/chrishavlin/ytcookiecutter.git
+    cookiecutter https://github.com/data-exp-lab/ytcookiecutter.git
 
 this will generate a new package directory. TO DO: write more.
 
