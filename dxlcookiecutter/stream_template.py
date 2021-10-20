@@ -4,6 +4,7 @@ import os
 from . import metatemplater
 from .custom_types import filelike
 from .utilities import _sanitize_path
+from typing import List
 
 class StreamTemplate:
 
@@ -74,7 +75,7 @@ def concat_stream_types(stream_types: list) -> list:
     return stream_code
 
 
-def write_template(stream_types: list[str],
+def write_template(stream_types: List[str],
                    filename: filelike = "stream_template.py",
                    subdir: filelike = "./"):
 
