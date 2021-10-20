@@ -6,7 +6,7 @@ from jinja2 import Environment, PackageLoader
 # ./templates/ can contain standard jinja start/end strings ("{{", etc.) that
 # are untouched by the processing of the metatemplates and will end up in the
 # final cookiecutter template.
-metatemplater = Environment(loader=PackageLoader("dxlcookiecutter"),
+metatemplater = Environment(loader=PackageLoader("ytcookiecutter"),
                             variable_start_string="!{",
                             variable_end_string="}!",
                             block_start_string="<%",

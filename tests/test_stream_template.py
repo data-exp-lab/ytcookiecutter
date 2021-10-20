@@ -1,4 +1,4 @@
-from dxlcookiecutter.stream_template import write_template
+from ytcookiecutter.stream_template import write_template
 
 
 def test_stream_template(tmp_path):

@@ -2,20 +2,20 @@
 
 from distutils.core import setup
 setup(
-    name='dxlcookiecutter',
-    packages=['dxlcookiecutter'],
+    name='ytcookiecutter',
+    packages=['ytcookiecutter'],
     version='0.1.0',
     description='Cookiecutter template for a Python package',
     author='Chris Havlin',
     license='BSD',
     author_email='chavlin@illinois.edu',
-    url='https://github.com/chrishavlin/dxlcookiecutter',
+    url='https://github.com/chrishavlin/ytcookiecutter',
     keywords=['cookiecutter', 'template', 'package', ],
     python_requires='>=3.6',
     install_requires=["yt", "Click>=7.0", "PyGithub"],
     entry_points={
         'console_scripts': [
-            'dxlcookiecutter=dxlcookiecutter.cli:main',
+            'ytcookiecutter=ytcookiecutter.cli:main',
         ],
     },
     classifiers=[

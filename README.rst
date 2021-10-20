@@ -1,11 +1,11 @@
 ===============
-dxlcookiecutter
+ytcookiecutter
 ===============
 
 This is an experimental Cookiecutter_ template for yt-related development, including rapid prototyping of new frontends.
 
-* GitHub repo: https://github.com/chrishavlin/dxlcookiecutter/
-* Documentation: https://dxlcookiecutter.readthedocs.io/
+* GitHub repo: https://github.com/chrishavlin/ytcookiecutter/
+* Documentation: https://ytcookiecutter.readthedocs.io/
 * Free software: BSD license
 
 Features
@@ -32,23 +32,23 @@ To use, first install cookiecutter and some extra dependencies needed for templa
 
 and then to use this template:
 
-    cookiecutter https://github.com/chrishavlin/dxlcookiecuttertest.git
+    cookiecutter https://github.com/chrishavlin/ytcookiecutter.git
 
 this will generate a new package directory. TO DO: write more.
 
 Maintainer Notes
 ----------------
 
-This repository is itself a package, `dxlcookiecutter`, that includes some tools for auto-generation of cookiecutter templates. It can be installed with
+This repository is itself a package, `ytcookiecutter`, that includes some tools for auto-generation of cookiecutter templates. It can be installed with
 
     $ pip install -e .
 
 after which you can (re)-generate templates using the command line. To view the options:
 
-    $ dxlcookiecutter -h
+    $ ytcookiecutter -h
 
 and running
 
-    $ dxlcookiecutter stream-template
+    $ ytcookiecutter stream-template
 
 will build the template for the stream frontend data loaders.

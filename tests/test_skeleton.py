@@ -1,4 +1,4 @@
-from dxlcookiecutter.skeleton_template import write_template
+from ytcookiecutter.skeleton_template import write_template
 from pathlib import Path
 
 def test_skeleton():

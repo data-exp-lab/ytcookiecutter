@@ -22,7 +22,7 @@ jobs:
         python -m pip install flake8 pytest
         python -m pip install pytest-cookies
         if [ -f tests/test_requirements.txt ]; then python -m pip install -r tests/test_requirements.txt; fi
-    - name: Setup dxlcookiecuttertest
+    - name: Setup ytcookiecutter
       run: |
         python -m pip install -e .
     - name: Run Tests
